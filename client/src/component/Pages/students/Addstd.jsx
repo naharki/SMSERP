@@ -1,22 +1,41 @@
 import { useState, useRef } from 'react';
+import { useNavigate } from 'react-router';
+import React, { useEffect } from 'react';
 
 const Addstd = () => {
   const [activity, setActivity] = useState({
     name: '',
     age: '',
-    sex:'',
-    phone:''
+    sex: '',
+    phone: '',
   });
 
+  const navigate = useNavigate();
+
   const [listData, setListData] = useState([]);
+  //This method fetches the records from the database.
+  useEffect(() => {
+    async function getRecords() {
+      const response = await fetch(`http://localhost:5050/user/`);
+      if (!response.ok) {
+        const message = `An error occoured: ${response.statusText}`;
+        window.alert(message);
+        return;
+      }
+      const records = await response.json();
+      setListData(records);
+    }
+    getRecords();
+    return;
+  }, [listData.length]);
+
   const [update, setUpdate] = useState(-1);
   const [error, showError] = useState('');
-  
+
   const nameRef = useRef();
   const ageRef = useRef();
   const sexRef = useRef();
-  const phoneRef = useRef(); 
-
+  const phoneRef = useRef();
 
   // event handler for input change
   function handleChange(e) {
@@ -25,8 +44,22 @@ const Addstd = () => {
   }
 
   // Function to add data
-  function addData(e) {
+  async function addData(e) {
     e.preventDefault();
+    const newUser = { ...activity };
+    await fetch('http://localhost:5050/user', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newUser),
+    }).catch((error) => {
+      window.alert(error);
+      return;
+    });
+    setActivity({ name: '', age: '', sex: '', phone: '' });
+    navigate('/createstd');
+
     // show error when user presses enter without entering all data
     if (Object.values(activity).some((value) => value === '')) {
       alert('Please fill in all fields');
@@ -48,22 +81,32 @@ const Addstd = () => {
     setActivity({
       name: '',
       age: '',
-      sex:'',
-      phone:''
+      sex: '',
+      phone: '',
     });
-
-    
   }
 
+  // This method will delte a record
   // handles deleteActivity
-  function deleteActivity(index) {
-    const afterDelete = listData.filter((data, i) => i !== index);
+  async function deleteActivity(id) {
+    await fetch(`http://localhost:5050/user/${id}`, {
+      method: 'DELETE',
+    });
+
+    const afterDelete = listData.filter((data) => data._id !== id);
+    console.log(afterDelete);
     setListData(afterDelete);
   }
 
+
   // handles removeAll
-  function removeAll() {
-    setListData([]);
+  async function removeAll() {
+    await fetch(`http://localhost:5050/user/`, {
+      method: "DELETE"
+    });
+
+    const newData =setListData([]);
+    return newData;
   }
 
   // handles edit
@@ -82,7 +125,7 @@ const Addstd = () => {
 
     const handleUpdate = () => {
       const newList = listData.map((li, index) =>
-        index === current.index? editedData : li
+        index === current.index ? editedData : li
       );
       setListData(newList);
       setUpdate(-1); // Exit the edit mode
@@ -109,16 +152,16 @@ const Addstd = () => {
           />
         </td>
         <td>
-        <select
-          placeholder="Choose Gender"
-          onChange={handleChange}
-          value={editedData.sex}
-          ref={sexRef}
-          name="sex"
-        >
-          <option value="">Select Gender</option>
-          <option value='male' >Male</option>
-          <option value='female'>Female</option>
+          <select
+            placeholder="Choose Gender"
+            onChange={handleChange}
+            value={editedData.sex}
+            ref={sexRef}
+            name="sex"
+          >
+            <option value="">Select Gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
           </select>
         </td>
         <td>
@@ -138,11 +181,15 @@ const Addstd = () => {
       </tr>
     );
   }
+  
+  function navigateHome() {
+    navigate('/')
+  }
 
   // const [select, setSelect]  = useState();
   return (
     <>
-      <form className="container d-flex justify-content-center m-5" >
+      <form className="container d-flex justify-content-center m-5">
         <input
           type="text"
           placeholder="Enter Name"
@@ -166,9 +213,9 @@ const Addstd = () => {
           name="sex"
         >
           <option value="">Select Gender</option>
-          <option value='male' >Male</option>
-          <option value='female'>Female</option>
-          </select>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+        </select>
         <input
           type="number"
           placeholder="Enter Phone Number"
@@ -184,7 +231,9 @@ const Addstd = () => {
         </button>
       </form>
       {/* Show filled Form Data in table */}
-      {listData.length !== 0 && <p className="d-flex justify-content-center m-3"> Here is Your List</p>}
+      {listData.length !== 0 && (
+        <p className="d-flex justify-content-center m-3"> Here is Your List</p>
+      )}
 
       <div className="container m-3 ">
         <table className="table table-bordered table-hover">
@@ -192,17 +241,21 @@ const Addstd = () => {
             <tr>
               <th scope="col">Name</th>
               <th scope="col">Age</th>
-              <th scope='col'>Sex</th>
-              <th scope='col'>Phone</th>
+              <th scope="col">Sex</th>
+              <th scope="col">Phone</th>
             </tr>
           </thead>
           <tbody>
             {listData.map((data, index) =>
               update === index ? (
-                <Edit current={{ ...data, index }} listData={listData} setListData={setListData} />
+                <Edit
+                  current={{ ...data, index }}
+                  listData={listData}
+                  setListData={setListData}
+                />
               ) : (
                 <tr key={index}>
-                  <th scope='row'>{data.name}</th>
+                  <th scope="row">{data.name}</th>
                   <td>{data.age}</td>
                   <td>{data.sex}</td>
                   <td>{data.phone}</td>
@@ -214,10 +267,10 @@ const Addstd = () => {
                     >
                       Edit
                     </button>
-                    
+
                     <button
                       className="btn btn-sm m-1 btn-danger"
-                      onClick={() => deleteActivity(index)}
+                      onClick={() => deleteActivity(data._id)}
                     >
                       Delete
                     </button>
@@ -229,10 +282,13 @@ const Addstd = () => {
         </table>
 
         {listData.length !== 0 && (
-          <button className="btn btn-md btn-danger" onClick={removeAll}>
+          <button className="btn btn-md btn-danger m-3" onClick={removeAll}>
             Delete All
           </button>
         )}
+        <button className="btn btn-md btn-outline-info" onClick={navigateHome} >
+          Home Page
+        </button>
       </div>
     </>
   );
