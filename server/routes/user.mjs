@@ -40,5 +40,6 @@ router.delete('/', async (req, res) => {
     const collection = db.collection("users");
     let result = await collection.deleteMany({});
     res.send(result).status(200);
-})
+});
+
 export default router;

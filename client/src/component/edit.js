@@ -8,6 +8,7 @@ export default function Edit() {
    level: "",
    records: [],
  });
+
  const params = useParams();
  const navigate = useNavigate();
  
@@ -60,7 +61,6 @@ export default function Edit() {
        'Content-Type': 'application/json'
      },
    });
- 
    navigate("/details");
  }
  
