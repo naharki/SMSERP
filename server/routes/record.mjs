@@ -11,6 +11,7 @@ router.get("/", async (req, res) => {
   res.send(results).status(200);
 });
 
+
 // This section will help you get a single record by id
 router.get("/:id", async (req, res) => {
   let collection = await db.collection("records");
@@ -32,6 +33,7 @@ router.post("/", async (req, res) => {
   let result = await collection.insertOne(newDocument);
   res.send(result).status(204);
 });
+
 
 // This section will help you update a record by id.
 router.patch("/:id", async (req, res) => {

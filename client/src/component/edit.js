@@ -8,6 +8,7 @@ export default function Edit() {
    level: "",
    records: [],
  });
+
  const params = useParams();
  const navigate = useNavigate();
  
@@ -60,8 +61,7 @@ export default function Edit() {
        'Content-Type': 'application/json'
      },
    });
- 
-   navigate("/");
+   navigate("/details");
  }
  
  // This following section will display the form that takes input from the user to update the data.
