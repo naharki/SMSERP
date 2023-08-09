@@ -4,7 +4,7 @@ import { Route, Routes } from "react-router-dom";
 import RecordList from "./component/record";
 import Edit from "./component/edit";
 import Create from "./component/create";
- 
+// import Editform from './component/Pages/students/Editform'
 import Addstd from './component/Pages/students/Addstd';
 import Homepage from './component/Pages/homepage';
 // import Login from './component/Login';
@@ -20,6 +20,7 @@ function App() {
        <Route path="/edit/:id" element={<Edit />} />
        <Route path="/create" element={<Create />} />
        <Route path='/createstd' element={ <Addstd /> } />
+       {/* <Route path="/editstd/:id" element={<Editform />} /> */}
      </Routes>
    
    </div>

@@ -176,10 +176,10 @@ function navigateHome() {
           </thead>
           <tbody>
             {listData.map((data, index) =>
-              update === index ? (
+              update === data._id ? (
                 <Edit
                 key={index}
-            
+            id ={data._id}
                 setUpdate={setUpdate}
                   current={{ ...data, index }}
                   listData={listData}
@@ -195,7 +195,7 @@ function navigateHome() {
                     <button
                       type="button"
                       className="btn btn-sm m-1 btn-warning"
-                      onClick={() => handleEdit(index)}
+                      onClick={() => handleEdit(data._id)}
                     >
                       Edit
                     </button>

@@ -2,7 +2,8 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const Homepage = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+
   function navigateStudent() {
     navigate('/createstd');
   }
@@ -12,23 +13,27 @@ const Homepage = () => {
   }
 
   return (
-    <>
-      <div className=" mx-auto d-flex flex-column  " style={{ width: '250px' }}>
-        <h2 className="p-4">Who are You?</h2>
-        <button
-          className="btn btn-outline-success btn-lg"
-          onClick={navigateStudent}
-        >
-          Students
-        </button>
-        <button
-          className="btn btn-outline-info btn-lg mt-3"
-          onClick={navigateTeacher}
-        >
-          Teachers
-        </button>
+    <div className="container">
+      <div className="row justify-content-center ">
+        <div className="col-md-6 my-5 " >
+          <h2 className="text-center ">Who are You?</h2>
+          <div className="d-flex btn btn-md justify-content-center flex-column align-items-center">
+            <button
+              className="btn btn-outline-success btn-lg mx-2 mb-2 outline-0"
+              onClick={navigateStudent}
+            >
+              Students
+            </button>
+            <button
+              className="btn btn-outline-info btn-lg mx-2"
+              onClick={navigateTeacher}
+            >
+              Teachers
+            </button>
+          </div>
+        </div>
       </div>
-    </>
+    </div>
   );
 };
 
