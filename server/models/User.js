@@ -1,0 +1,7 @@
+
+function A (){
+
+    function b(){
+        
+    }
+}

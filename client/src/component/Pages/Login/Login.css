@@ -1,0 +1,35 @@
+
+.h-custom {
+height: calc(100% - 73px);
+}
+@media (max-width: 450px) {
+.h-custom {
+height: 100%;
+}
+}
+
+.email {
+height: 38px;
+border: 0.6px solid rgb(185 184 184);
+outline: 0.6px solid rgb(123 116 116);
+
+}
+
+.password-area { 
+   position: relative;
+   border: 0.6px solid rgb(185 184 184);
+   outline: 0.6px solid rgb(123 116 116);
+   background-color: white;
+   height: 38px;
+}
+
+.password{
+    outline: none;
+    border: none;
+} 
+.eye {
+     top: 35%;  
+  position: absolute;
+  right: 4px;
+ 
+} 

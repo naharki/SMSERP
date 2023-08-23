@@ -1,11 +1,14 @@
 import express from "express";
-import db from "../db/conn.mjs";
+import db from "../config/conn.mjs";
 import { ObjectId } from "mongodb";
+import cors from 'cors';
+
 
 const router = express.Router();
+router.use(cors());
 
 // This section will help you get a list of all the records.
-router.get("/", async (req, res) => {
+router.get("/",  async (req, res) => {
   let collection = await db.collection("records");
   let results = await collection.find({}).toArray();
   res.send(results).status(200);

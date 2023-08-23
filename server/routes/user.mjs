@@ -1,6 +1,7 @@
 import express from 'express';
-import db from '../db/conn.mjs';
+import db from '../config/conn.mjs';
 import { ObjectId } from 'mongodb';
+import auth from '../middleware/check_auth.mjs';
 
 const router = express.Router();
 
@@ -19,7 +20,7 @@ router.post("/", async (req, res)=> {
 });
 
 //This section will help you to get a list of all the records:
-router.get('/', async(req, res)=> {
+router.get('/',  async(req, res)=> {
     let collection = await db.collection("users");
     let results = await collection.find({}).toArray();
     res.send(results).status(200);
