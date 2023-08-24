@@ -6,14 +6,17 @@ import users from './routes/user.mjs';
 import  accounts from './routes/account.mjs';
 
 const port = process.env.port || 5050;
+
 const app = express();
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(cors());
+
+
 
 //cross origin resource sharing
 //cors policy
-app.use(cors());
 
-//json
-app.use(express.json());
 
 //load routes
 app.use("/record", records);

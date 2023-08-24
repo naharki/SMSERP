@@ -1,32 +1,30 @@
 import jwt from 'jsonwebtoken';
 import '../loadEnvironment.mjs';
 import db from '../config/conn.mjs';
+import { ObjectId } from 'mongodb';
 
-
-//module exports
-const check_user_auth = async (req, res, Next) => {
+//check authentication of the user:
+const check_user_auth = async (req, res, next) => {
+  let token;
   const { authorization } = req.headers;
-  let token
   if (authorization && authorization.startsWith('Bearer')) {
     try {
-       token = authorization.split(' ')[1];
+      token = authorization.split(' ')[1];
 
       //verify token
       const { userId } = jwt.verify(token, process.env.JWT_SECRET);
       // console.warn(userId)
-
-      //get user from tokennp
-      let connection = await db.collection('accounts');
-      req.userData = await connection.findOne({ _id: userId }, { projection: { password: 0 } });
-      console.warn(userData)
-      Next();
+      let collection = await db.collection('accounts');
+      let query = { _id: new ObjectId(userId) };
+      req.result = await collection.findOne(query);
+      next();
     } catch (error) {
       res.status(401).send({ status: 'failed', message: 'Unauthorized user' });
     }
   } else {
     if (!token) {
-      
-        res.status(404)
+      res
+        .status(404)
         .send({ status: 'failed', message: 'Unauthorized user, no token' });
     }
   }

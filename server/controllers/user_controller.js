@@ -1,11 +1,11 @@
 import db from '../config/conn.mjs';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { ObjectId } from 'mongodb';
+// import { ObjectId } from 'mongodb';
 import '../loadEnvironment.mjs';
 
-//const imports
 
+//api for new user registration 
 export const userRegistration = async (req, res) => {
   const { name, email, password } = req.body;
   try {
@@ -31,14 +31,12 @@ export const userRegistration = async (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: '1hr' }
     );
-    res
-      .status(201)
-      .send({
-        Status: 'success',
-        message: 'Registration Success',
-        Token: token,
-        user: result,
-      });
+    res.status(201).send({
+      Status: 'success',
+      message: 'Registration Success',
+      Token: token,
+      user: result,
+    });
   } catch (error) {
     console.error('login error', error);
     res.status(500).send('Server error');
@@ -81,22 +79,27 @@ export const userLogin = async (req, res) => {
 
 //change user password
 export const change_user_password = async (req, res) => {
-  const { password, confirm_password } = req.body;
-  if (password && confirm_password) {
-    if (password !== confirm_password) {
-      res.send({
-        status: 'failed',
-        message: 'new password and confirm password does not match.',
-      });
+  try {
+    const { password, password_confirmation } = req.body;
+    if (password && password_confirmation) {
+      if (password !== password_confirmation) {
+        res.send({
+          status: 'failed',
+          message: "New Password and Confirm New Password doesn't match",
+        });
+      } else {
+        // const salt = await bcrypt.genSalt(10)
+        // const newHashPassword = await bcrypt.hash(password, salt)
+        // await UserModel.findByIdAndUpdate(req.user._id, { $set: { password: newHashPassword } })
+        res.send({
+          status: 'success',
+          message: 'Password changed succesfully',
+        });
+      }
     } else {
-//hash password
-const hashedPassword = await bcrypt.hash(password, 10);
-res.send({"status":"success", "message":"password changed successfully"})
+      res.send({ status: 'failed', message: 'All Fields are Required' });
     }
-  } else {
-    res.send({
-      status: 'failed',
-      message: 'All fields are required',
-    });
+  } catch (error) {
+    res.send({ status: 'failed', message: 'pronblem while setting password' });
   }
 };

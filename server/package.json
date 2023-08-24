@@ -5,12 +5,11 @@
   "main": "server.mjs",
   "scripts": {
     "start": "node server.mjs",
-    "dev" : "nodemon server"
+    "dev": "nodemon server"
   },
-
   "author": "",
   "license": "ISC",
-  "type" : "module",
+  "type": "module",
   "dependencies": {
     "bcrypt": "^5.1.0",
     "cors": "^2.8.5",
