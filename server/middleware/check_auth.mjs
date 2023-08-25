@@ -1,7 +1,6 @@
 import jwt from 'jsonwebtoken';
 import '../loadEnvironment.mjs';
-import db from '../config/conn.mjs';
-import { ObjectId } from 'mongodb';
+import UserModel from '../models/User.js';
 
 //check authentication of the user:
 const check_user_auth = async (req, res, next) => {
@@ -13,10 +12,10 @@ const check_user_auth = async (req, res, next) => {
 
       //verify token
       const { userId } = jwt.verify(token, process.env.JWT_SECRET);
+    //   console.warn(userId)
       // console.warn(userId)
-      let collection = await db.collection('accounts');
-      let query = { _id: new ObjectId(userId) };
-      req.result = await collection.findOne(query);
+      req.user = await UserModel.findById(userId).select('-password');
+        // console.warn(req.user);
       next();
     } catch (error) {
       res.status(401).send({ status: 'failed', message: 'Unauthorized user' });

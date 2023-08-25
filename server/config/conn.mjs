@@ -1,16 +1,14 @@
-import {MongoClient} from 'mongodb';
+import mongoose from 'mongoose';
 
-
-//database connection
-const connectionString = process.env.ATLAS_URI || "";
-const client = new MongoClient(connectionString);
-
-let conn;
-try{
-   conn =await client.connect();
-} catch(e){
-  console.error(e, 'error while connecting to database');
-}
-
-let db = conn.db("sample_training");
-export default db;
+const connectDB = async (connectionString) => {
+  try {
+    const DB_OPTIONS = {
+      dbName : "sample_training",
+    };
+    await mongoose.connect(connectionString, DB_OPTIONS);
+    console.warn('Db connect successfully');
+  } catch (e) {
+    console.error(e, 'error while connecting to database');
+  }
+};
+ export default connectDB;
