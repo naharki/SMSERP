@@ -12,7 +12,7 @@ export const userRegistration = async (req, res) => {
     let userExisted = await UserModel.findOne({ email: email });
 
     if (userExisted) {
-      res.status(400).json({ message: 'User Already existed' });
+      res.status(404).json({ message: 'User Already existed' });
     } else {
       //check if password & password confirmation is matched
       if (password === password_confirmation) {
@@ -39,14 +39,14 @@ export const userRegistration = async (req, res) => {
           { expiresIn: '1hr' }
         );
 
-        res.status(201).send({
+        res.status(200).send({
           Status: 'success',
           message: 'Registration Success',
           Token: token,
           user: newUser,
         });
       } else {
-        res.status().send({
+        res.status(404).send({
           status: 'failed',
           message: 'Password and confirm password doesnot match',
         });

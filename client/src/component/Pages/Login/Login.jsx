@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEyeSlash, faEye } from '@fortawesome/free-regular-svg-icons';
 import Register from './Registe';
 import { Link, useNavigate } from 'react-router-dom';
 import '../Login/Login.css';
-
 
 //login components
 const Login = () => {
@@ -22,6 +22,52 @@ const Login = () => {
 
   const [account, toogleAccount] = useState('true');
   const [type, setType] = useState('password');
+const [error, showError] = useState('');
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    const newAccount = { ...activity };
+    try {
+      const result = await axios.post(
+        'http://localhost:5050/api/user/login',
+        newAccount
+      );
+      // .then((pushData)=> )
+      // body: JSON.stringify(newAccount),;
+      // console.log(result.status)
+      // const res = await result.json();
+      console.log(result.data.token);
+      if (result.status !== 200) {
+        // console.log('error while fetching data');
+alert("Some thing went wrong")
+        return;
+      }
+
+      let fetchUserDetails = await axios.get(
+        'http://localhost:5050/api/user/loggeduser',
+        {
+          headers: {
+            Authorization: `Bearer ${result.data.token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      // console.log(fetchUserDetails.data)
+      const resData = await fetchUserDetails.data;
+      // console.log(details)
+      navigate('/dashboard', { state: resData });
+
+    } catch (error) {
+      // alert('error', error);
+      // console.log(error.response.data.message)
+      //set backend error response on the front4nd
+      showError(error.response.data.message)
+
+    }
+  }
+  // console.log(details);
+
+  //useEffect hook
 
   function toogleSignup() {
     account === 'false' ? toogleAccount('true') : toogleAccount('false');
@@ -39,23 +85,8 @@ const Login = () => {
   }
 
   //handle submit
-  async function handleSubmit(e) {
-    e.preventDefault();
-    const newAccount = { ...activity };
-    let result = await fetch('http://localhost:5050/account/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(newAccount),
-    });
-    result = await result.json();
-    if (result.token) {
-      localStorage.setItem('user', JSON.stringify(result.userId));
-      localStorage.setItem('token', JSON.stringify(result.token));
-      navigate('/createstd');
-    } 
-  }
+  //this block first send login credential to the backend and
+  //if everything it calls second api otherwise it doesnot call second api
 
   return (
     <section className="vh-100">
@@ -74,12 +105,14 @@ const Login = () => {
               <h6 className="text-center fw-bold text-success">
                 Welcome back {schoolInfo.name}
               </h6>
+              <div></div>
             </div>
 
             <div className="col-12 col-sm-7 col-md-8 col-lg-5 col-xl-7 offset-xl-1">
               <form
                 className="d-flex flex-column mx-auto"
                 style={{ maxWidth: '300px', height: '300px' }}
+                // onSubmit={(e) => handleSubmit(e)}
               >
                 <h4 className=" text-center text-primary">Welcome to ERP</h4>
                 <input
@@ -89,6 +122,7 @@ const Login = () => {
                   value={activity.email}
                   onChange={handleChange}
                   placeholder="Enter Email"
+                  autoComplete='on'
                 />
 
                 <div className="password-area form-control mb-4 ">
@@ -99,6 +133,7 @@ const Login = () => {
                     value={activity.password}
                     onChange={handleChange}
                     placeholder="Enter Password"
+                    autoComplete='off'
                   />
                   <span
                     className="eye flex justify-around items-center"
@@ -109,18 +144,17 @@ const Login = () => {
                       //conditionally rendereing :
                       // type === 'password' ? faEyeSlash : faEye
                       icon={type === 'password' ? faEyeSlash : faEye}
-                      size={20}
+                      size="lg"
                     />
                   </span>
                 </div>
-
                 <button
                   className="btn btn-primary btn-sm mb-1"
                   onClick={(e) => handleSubmit(e)}
-                  type="button"
                 >
                   Login
                 </button>
+              {error && <p className='text-italic text-center text-danger '>{error}</p>}
                 <Link className="text-primary text-decoration-none text-center">
                   Forget Password?
                 </Link>

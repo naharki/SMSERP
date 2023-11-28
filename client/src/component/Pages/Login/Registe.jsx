@@ -7,7 +7,8 @@ const Register = () => {
   const [activity, setActivity] = useState({
     name : '',
     email: '',
-    password: ''
+    password: '',
+    password_confirmation:''
   });
 
  
@@ -21,7 +22,8 @@ const Register = () => {
   async function handleSubmit(e) {
     e.preventDefault();
     const newAccount = { ...activity };
-    await fetch('http://localhost:5050/account/register', {
+    console.log(newAccount)
+    await fetch('http://localhost:5050/api/user/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -67,6 +69,15 @@ const Register = () => {
           value={activity.password}
           onChange={(e) => handleChange(e)}
           placeholder="Enter Password"
+          autoComplete="current-password"
+        />
+        <input
+          type="password"
+          name="password_confirmation"
+          className="mb-2"
+          value={activity.password_confirmation}
+          onChange={(e) => handleChange(e)}
+          placeholder="confirm Password"
           autoComplete="current-password"
         />
         <button className="mb-1 btn btn-primary btn-sm mb-3"  type='button' onClick={(e) => handleSubmit(e)}>
