@@ -80,7 +80,11 @@ export const teacher_registration = async (req, res) => {
   }
 };
 
-//this is the controller to list all the registered teachers from the backend
+//this is the controller to list all the registered 
+//teachers from the backend
 export const teachers_lists = async (req, res) => {
-  
-}
+  const teacher_list = await Teacher_model.find(); 
+  // console.log(teacher_list); 
+  res.status(200).send(teacher_list);
+}; 
+
