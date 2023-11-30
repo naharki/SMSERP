@@ -14,6 +14,7 @@ const Addstd = () => {
   const navigate = useNavigate();
 
   const [listData, setListData] = useState([]);
+  
   //This method fetches the records from the database.
   useEffect(() => {
     async function getRecords() {

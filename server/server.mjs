@@ -1,21 +1,34 @@
 import express from 'express';
 import cors from 'cors';
-import "./loadEnvironment.mjs";
-import records from "./routes/record.mjs";
-import users from './routes/user.mjs';
+import './loadEnvironment.mjs';
+// import records from "./routes/record.mjs";
+// import users from './routes/user.mjs';
+import accounts from './routes/account.mjs';
+import teachers from './routes/teachers_routes.js';
+import students from './routes/student_routes.js'
+import connectDB from './config/conn.mjs';
 
 const port = process.env.port || 5050;
-const app = express();
 
-//cross origin resource sharing
-app.use(cors());
+const app = express();
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+//database connection
+const connectionString = process.env.ATLAS_URI || '';
+connectDB(connectionString);
 
-app.use("/record", records);
-app.use("/user", users);
+//cors policy
+app.use(cors());
+
+// //load routes
+// app.use("/record", records);
+// app.use("/user", users);
+app.use('/api/user', accounts);
+app.use('/api/user', teachers);
+app.use('/api/user', students)
 
 //start the express server:
-app.listen(port, () =>{
-  console.log(`app is running on port ${port}`)
+app.listen(port, () => {
+  console.log(`app is running on port ${port}`);
 });
