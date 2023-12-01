@@ -1,6 +1,7 @@
 import '../loadEnvironment.mjs';
 import bcrypt from 'bcrypt';
 import student_model from '../models/student.js';
+import Student_model from '../models/student.js';
 
 //api for new teacher registration
 export const student_registration = async (req, res) => {
@@ -72,5 +73,26 @@ export const student_registration = async (req, res) => {
   } catch (error) {
     console.error('Registration error', error);
     res.status(500).send('Server error');
+  }
+};
+
+//students lists 
+export const student_lists = async (req, res) => {
+  try {
+    const student = await Student_model.find(); 
+    res.send(student).status(200);
+  } catch (error) {
+    res.send("Something went wrong while getting student lists").status(404);
+  }
+};
+
+//Total students
+export const total_students = async (req, res) => {
+  try {
+    const student = await Student_model.find(); 
+   const total = Object.keys(student).length; 
+    res.send(total.toString()).status(200);
+  } catch (error) {
+    res.send("Something went wrong while getting total student number").status(404);
   }
 };
