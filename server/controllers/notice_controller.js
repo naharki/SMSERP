@@ -25,3 +25,26 @@ export const add_notice = async (req, res) => {
         res.status(404).send(error);
     }
 };
+
+// list all the notices: 
+export const Notice_list = async(req, res) => {
+    try {
+        const notice = await Notice_model.find() ; 
+        res.status(200).send(notice); 
+        console.log(notice);
+    } catch (error) {
+        res.send("something went wrong while getting notice lists");
+    }
+}; 
+
+//total notices 
+export const Total_list = async (req, res) => {
+    try {
+        const notice = await Notice_model.find(); 
+        const total_notice = Object.keys(notice).length; 
+        res.status(200).send(total_notice.toString());
+        console.log(total_notice);
+    } catch (error) {
+       res.send("somehting went wrong while getting total notice number"); 
+    }
+};
