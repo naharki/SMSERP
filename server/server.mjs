@@ -6,6 +6,7 @@ import './loadEnvironment.mjs';
 import accounts from './routes/account.mjs';
 import teachers from './routes/teachers_routes.js';
 import students from './routes/student_routes.js'
+import notices from './routes/notice_route.js';
 import connectDB from './config/conn.mjs';
 
 const port = process.env.port || 5050;
@@ -26,7 +27,8 @@ app.use(cors());
 // app.use("/user", users);
 app.use('/api/user', accounts);
 app.use('/api/user', teachers);
-app.use('/api/user', students)
+app.use('/api/user', students); 
+app.use('/api/user', notices);
 
 //start the express server:
 app.listen(port, () => {

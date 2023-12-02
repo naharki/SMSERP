@@ -83,7 +83,6 @@ export const teacher_registration = async (req, res) => {
 //this is the controller to list all the registered 
 //teachers from the backend
 export const teachers_lists = async (req, res) => {
-<<<<<<< HEAD
   try {
     const teacher_lists = await Teacher_model.find(); 
     res.status(200).send(teacher_lists); 
@@ -101,13 +100,6 @@ export const total_teachers = async (req, res) => {
   res.status(200).send(teacher_number.toString()); 
   // console.log(teacher_number);
   } catch (error) {
-    res.status(404).send("Error while getting teachers numbers")
+    res.status(404).send("Error while getting teachers numbers"); 
   }
 }
-=======
-  const teacher_list = await Teacher_model.find(); 
-  // console.log(teacher_list); 
-  res.status(200).send(teacher_list);
-}; 
-
->>>>>>> 12afc06c66d467de93778ca6fa2a43f4444dc116

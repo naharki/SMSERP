@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const notice_Schema = new mongoose.Schema({
+const Notice_Schema = new mongoose.Schema({
   title: {
     type: String,
     required: true,
@@ -8,11 +8,10 @@ const notice_Schema = new mongoose.Schema({
   },
   details:{
     type: String, required: true, trim : true
-  }, 
+  },
   date: {
-    type: Date, default: Date.now, required: true, trim: true
-  }
+    type: Date, trim: true, required: true
+  } 
 });
-
-const Notice_model = mongoose.model('notices', notice_Schema); 
+const Notice_model = mongoose.model('notices', Notice_Schema); 
 export default Notice_model;
